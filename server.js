@@ -31,13 +31,16 @@ app.set("view engine", "handlebars");
 
 // Require all models
 var db = require("./models");
+var dataBaseURI = "mongodb://localhost/mongoHeadlines";
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
-
-mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI, {
+if (process.env.MONGODB_URI){
+	mongoose.connect(process.env.MONGODB_URI)
+}
+else{
+	mongoose.connect(dataBaseURI, {
   useMongoClient: true
 });
+}
 
 var routes = require("./routes/routes.js");
 
