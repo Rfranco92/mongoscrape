@@ -7,6 +7,7 @@ $(document).ready(function() {
   $(document).on("click", ".scrape-new", handleArticleScrape);
   $(document).on("click", ".btn.notes", handleArticleNotes);
   $(document).on("click", ".btn.save", handleNoteSave);
+  $(document).on("click", ".btn.note-delete", handleNoteDelete);
 
 
   // Once the page is ready, run the initPage function to kick things off
@@ -101,7 +102,7 @@ $(document).ready(function() {
       // already in our collection, re render the articles on the page
       // and let the user know how many unique articles we were able to save
       initPage();
-      bootbox.alert("<h3 class='text-center m-top-80'>" + data.message + "<h3>");
+      bootbox.alert("<h3 class='text-center m-top-80'>You did it!" + "<h3>");
     });
   }
 
@@ -197,5 +198,20 @@ $(document).ready(function() {
         bootbox.hideAll();
       });
     }
+  }
+
+    function handleNoteDelete() {
+    // This function handles the deletion of notes
+    // First we grab the id of the note we want to delete
+    // We stored this data on the delete button when we created it
+    var noteToDelete = $(this).data("_id");
+    // Perform an DELETE request to "/api/notes/" with the id of the note we're deleting as a parameter
+    $.ajax({
+      url: "/api/notes/" + noteToDelete,
+      method: "DELETE"
+    }).then(function() {
+      // When done, hide the modal
+      bootbox.hideAll();
+    });
   }
 });

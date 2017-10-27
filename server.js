@@ -6,7 +6,6 @@ var mongoose = require("mongoose");
 // Require request and cheerio. This makes the scraping possible
 var request = require("request");
 var cheerio = require("cheerio");
-var methodOverride = require("method-override");
 
 
 var PORT = process.env.PORT || 3000;
@@ -17,7 +16,6 @@ var app = express();
 app.use(logger("dev"));
 app.use(express.static("public"));
 
-app.use(methodOverride("_method"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // Send JSON responses
 app.use(bodyParser.text());
@@ -32,7 +30,6 @@ app.set("view engine", "handlebars");
 // Require all models
 var db = require("./models");
 var dataBaseURI = "mongodb://localhost/mongoHeadlines";
-
 if (process.env.MONGODB_URI){
 	mongoose.connect(process.env.MONGODB_URI, {
   useMongoClient: true
@@ -43,6 +40,8 @@ else{
   useMongoClient: true
 });
 }
+
+mongoose.Promise = Promise;
 
 var routes = require("./routes/routes.js");
 

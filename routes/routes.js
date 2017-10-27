@@ -33,29 +33,27 @@ app.get("/api/fetch", function(req, res) {
         .children(".story-heading")
         .text();
       result.link = $(this)
-        .children("a")
+        .children()
         .attr("href");
       result.summary = $(this)
-        .children(".summary")
+        .children("summary")
         .text();
     // Save these results in an object that we'll push into the results array we defined earlier
     // Create a new Article using the `result` object built from scraping
-      for (var i = 0; i < db.Article.length; i++){
       if (result.headline && result.link && result.summary){
 
       db.Article
         .create(result)
         .then(function(dbArticle) {
           // If we were able to successfully scrape and save an Article, send a message to the client
+          
           res.json(dbArticle);
         })
         .catch(function(err) {
           // If an error occurred, send it to the client
           res.json(err);
         });
-      }
-     } 
-     res.json()
+       }  
     });
   });
 });
@@ -96,8 +94,6 @@ app.get("/api/notes/:id", function(req, res) {
 // Route for saving/updating an Article's associated Note
 app.post("/api/notes", function(req, res) {
 
-  db.Note.drop_id()
-
   // Create a new note and pass the req.body to the entry
   db.Note
     .create(req.body)
@@ -114,6 +110,21 @@ app.post("/api/notes", function(req, res) {
       res.json(dbArticle);
     })
     .catch(function(err) {
+
+      console.log(err);
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+});
+
+app.delete("/api/notes/:id", function (req, res) {
+
+  db.Note
+    .remove({ _id: req.params.id})
+      .then(function (dbArticle) {
+        res.json(dbArticle)
+      })
+      .catch(function(err) {
 
       console.log(err);
       // If an error occurred, send it to the client
