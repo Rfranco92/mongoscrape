@@ -96,13 +96,16 @@ $(document).ready(function() {
 
 
   function handleArticleScrape() {
+
+    console.log("This Works");
     // This function handles the user clicking any "scrape new article" buttons
     $.get("/api/fetch").then(function(data) {
+      console.log(data);
       // If we are able to succesfully scrape the NYTIMES and compare the articles to those
       // already in our collection, re render the articles on the page
       // and let the user know how many unique articles we were able to save
       initPage();
-      bootbox.alert("<h3 class='text-center m-top-80'>You did it!" + "<h3>");
+      bootbox.alert("<h3 class='text-center m-top-80'>You did it!<h3>");
     });
   }
 

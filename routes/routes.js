@@ -13,7 +13,6 @@ app.get("/", function(req, res) {
 // A GET route for scraping the echojs website
 app.get("/api/fetch", function(req, res) {
   // First, we grab the body of the html with request
-
   request("http://www.nytimes.com", function(error, response, html) {
 
   // Load the HTML into cheerio and save it to a variable
@@ -22,6 +21,7 @@ app.get("/api/fetch", function(req, res) {
 
   // An empty array to save the data that we'll scrape
   var result = {};
+
 
   // Select each element in the HTML body from which you want information.
   // NOTE: Cheerio selectors function similarly to jQuery's selectors,
@@ -33,19 +33,20 @@ app.get("/api/fetch", function(req, res) {
         .children(".story-heading")
         .text();
       result.link = $(this)
-        .children()
+        .children(".story-heading")
+        .children("a")
         .attr("href");
       result.summary = $(this)
-        .children("summary")
+        .children(".summary")
         .text();
+
+        console.log(result);
     // Save these results in an object that we'll push into the results array we defined earlier
     // Create a new Article using the `result` object built from scraping
       if (result.headline && result.link && result.summary){
-
       db.Article
         .create(result)
         .then(function(dbArticle) {
-          // If we were able to successfully scrape and save an Article, send a message to the client
           
           res.json(dbArticle);
         })
